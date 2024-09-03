@@ -21,18 +21,6 @@ def load_config(file_path):
     return config
 
 
-def get_grid_nominal_value(grid_nominal_value_input):
-    try:
-        grid_nominal_value_float = float(grid_nominal_value_input)
-        if 50 <= grid_nominal_value_float <= 500: #if in the range of 50-500, inclusive
-            grid_nominal_value_float *= 1_000_000  # Convert MW to W after the check 
-        else:
-            raise ValueError("Value must be between 50 MW and 500 MW")
-    except ValueError as e:
-        sys.exit(str(e))
-    return grid_nominal_value_float
-
-
 def get_csv_data(data_path, column_name):
     df = pd.read_csv(data_path)
     fixed_value = df[column_name]
@@ -95,7 +83,7 @@ def optimizer(energy_system, config):
     #meta results contain data of solver's performance and outcome
     energy_system.results['meta'] = processing.meta_results(model)
     # # Dump the energy system including the results (saving) for later analyzing of the results without running the whole code
-    energy_system.dump('U:\\ann82611\\04_Code\\hydrogen_hub\\hydrogen_hub\\h2_hub_dumps', 'h2_hub_dump.oemof')
+    energy_system.dump('C:\\Users\\ann82611\\ownCloud\\U-Platte\\04_Code\\hydrogen_hub\\h2_hub_minimalschnitt\\h2_hub_dumps', 'h2_hub_dump.oemof')
     #pp.pprint(energy_system.results['main'])
     #pp.pprint(energy_system.results['meta'])
     return energy_system
@@ -103,16 +91,11 @@ def optimizer(energy_system, config):
 
 def main():
     config = load_config('config.yaml') #enter relative file path config file
-    
-    grid_nominal_value_input = input("Grid Nominal Value [MW] (value must be between 50 MW and 500 MW): ")
-    
-    
-    config['grid_nominal_value'] = get_grid_nominal_value(grid_nominal_value_input) #update config file according to user input
     h2_hub = create_energy_system(config)
     h2_hub = optimizer(h2_hub, config) #Ergebnisse sind unter .results gespeichert
     plot_energy_system(h2_hub)
     plot_result(h2_hub)
 
-
+print("test")
 if __name__ == "__main__":
     main() 
