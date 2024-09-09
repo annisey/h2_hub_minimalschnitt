@@ -67,9 +67,12 @@ def create_energy_system(config):
     h2_hub.add(h2_storage)
 
     #add sink
-    steel_mill = Sink(label='steel_mill', inputs={h2_to_production_bus: Flow(), electricity_bus: Flow()})
+    steel_mill_power = config['steel_mill_power']
+    load = [steel_mill_power]*len(index)
+    steel_mill = Sink(label='steel_mill', inputs={h2_to_production_bus: Flow(), electricity_bus: Flow(max=57000000, nominal_value=1)})
+    electricity_slack = Sink(label='electricity_slack', inputs={electricity_bus: Flow(variable_costs=100)})
 
-    h2_hub.add(steel_mill)
+    h2_hub.add(steel_mill, electricity_slack)
 
     return h2_hub
 
@@ -96,6 +99,5 @@ def main():
     plot_energy_system(h2_hub)
     plot_result(h2_hub)
 
-print("test")
 if __name__ == "__main__":
     main() 
