@@ -13,6 +13,7 @@ import pandas as pd
 
 import sys
 
+from pyomo.core import Constraint
 
 #load config file (where parameters are set)
 def load_config(file_path):
@@ -29,7 +30,7 @@ def get_csv_data(data_path, column_name):
 
 def create_energy_system(config):
 
-    index = create_time_index(2023) #range of a year, hourly
+    index = create_time_index(2019) #range of a year, hourly
 
     #create system
     h2_hub = solph.EnergySystem(timeindex=index, infer_last_interval=False) #einlesen ob infer_last_interval true or false
@@ -67,10 +68,13 @@ def create_energy_system(config):
     h2_hub.add(h2_storage)
 
     #add sink
-    steel_mill_power = config['steel_mill_power']
-    load = [steel_mill_power]*len(index)
-    steel_mill = Sink(label='steel_mill', inputs={h2_to_production_bus: Flow(), electricity_bus: Flow(max=57000000, nominal_value=1)})
-    electricity_slack = Sink(label='electricity_slack', inputs={electricity_bus: Flow(variable_costs=100)})
+    steel_mill = Sink(label='steel_mill', inputs={h2_to_production_bus: Flow(), electricity_bus: Flow(max=config['electricity_to_steel_max'], nominal_value=1)})
+    electricity_slack = Sink(label='electricity_slack', inputs={electricity_bus: Flow(variable_costs=config['electricity_slack_variable_costs'])})
+
+# next steps include:
+# co2 emissions
+# dynamic flow to hydrogen (with costs) and input flow for hydrogen
+# 
 
     h2_hub.add(steel_mill, electricity_slack)
 

@@ -2,13 +2,13 @@
 
 
 # pv settings
-pv_data_path: "U:\\ann82611\\04_Code\\hydrogen_hub\\hydrogen_hub\\solar_power_northern_germany.csv"
-pv_data_column: "Solar Power"  #enter name of the column to get normed fixed values for Flow (value between 0 and 1)
-pv_nominal_value: 50000000  # pv_nominal_value [W], e.g. 5000000 = 5MW
+pv_data_path: "weather_data/pv_data.csv"
+pv_data_column: "Wind Power"  #enter name of the column to get normed fixed values for Flow (value between 0 and 1)
+pv_nominal_value: 90000000  # pv_nominal_value [W], e.g. 5000000 = 5MW
 
 # wind settings
-wind_data_path: "U:\\ann82611\\04_Code\\hydrogen_hub\\hydrogen_hub\\wind_power_northern_germany.csv"
-wind_data_column: "Wind Power" #enter name of the column to get normed fixed values for Flow (value between 0 and 1)
+wind_data_path: "weather_data/example_data_hourly.csv"
+wind_data_column: "P_wp" #enter name of the column to get normed fixed values for Flow (value between 0 and 1)
 wind_nominal_value: 80000000  # wind_nominal_value [W], e.g. 10000000 = 10MW
 
 # grid settings
@@ -20,13 +20,20 @@ h2_ship_nominal_value: 500
 h2_ship_variable_costs: 50
 
 # electrolyzer settings
-electrolyzer_nominal_value: 50000000
+electrolyzer_nominal_value: 50000000 #50MW
 
 # h2_storage settings
-h2_storage_loss_rate: 0.001
+h2_storage_loss_rate: 0
 h2_storage_nominal_storage_capacity: 200
-h2_storage_inflow_conversion: 0.98
-h2_storage_outflow_conversion_factor: 0.8
+h2_storage_inflow_conversion: 1
+h2_storage_outflow_conversion_factor: .9
+
+# steel mill
+steel_mill_power: 2 #Annahme 1.000.000t Stahl pro Jahr bei 500kWh entspricht einer Leistung von 57MW
+electricity_to_steel_max: 57000000
+
+#electricity slack
+electricity_slack_variable_costs: 100
 
 #solver settings
 solver: "cbc" #decide which solver is chosen... (garubi, glpk,...)
