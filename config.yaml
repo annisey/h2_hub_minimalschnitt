@@ -32,8 +32,12 @@ h2_storage_outflow_conversion_factor: .9
 steel_mill_power: 2 #Annahme 1.000.000t Stahl pro Jahr bei 500kWh entspricht einer Leistung von 57MW
 electricity_to_steel_max: 57000000
 
-#electricity slack
+# electricity slack
 electricity_slack_variable_costs: 100
+
+# co2 emissions
+# spezifischer Treibhausgas emissionen strommix (Icha, P., & Lauf, T. (2024). Umweltbundesamt)
+co2_emissions: 500000000 #500 g/kWh
 
 #solver settings
 solver: "cbc" #decide which solver is chosen... (garubi, glpk,...)

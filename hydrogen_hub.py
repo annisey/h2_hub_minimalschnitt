@@ -41,8 +41,9 @@ def create_energy_system(config):
     electricity_bus = Bus(label='electricity') #, inputs, outputs
     h2_to_storage_bus = Bus(label='h2_to_storage') #inputs, outputs to add
     h2_to_production_bus = Bus(label='h2_to_production') #, inputs, outputs
+    co2_emissions_bus = Bus(label='co2_emissions_bus')
 
-    h2_hub.add(electricity_bus, h2_to_production_bus, h2_to_storage_bus)
+    h2_hub.add(electricity_bus, h2_to_production_bus, h2_to_storage_bus, co2_emissions_bus)
 
     #open and get data from csv
     #pfad übergeben und Spaltenname für normed fixed value (Flow) (eingegeben im Config file)
@@ -52,7 +53,8 @@ def create_energy_system(config):
     #add sources
     pv_source = Source(label='pv', outputs={electricity_bus: Flow(fix=pv_data, nominal_value=config['pv_nominal_value'])}) # 5MW (?)
     wind_source = Source(label='wind', outputs={electricity_bus: Flow(fix=wind_data, nominal_value=config['wind_nominal_value'])}) #10MW (?) 
-    grid_source = Source(label='grid', outputs={electricity_bus: Flow(fix=1, nominal_value=config['grid_nominal_value'], variable_costs=config['grid_variable_costs'])}) #100MW (?)
+    grid_source = Source(label='grid', outputs={electricity_bus: Flow(fix=1, nominal_value=config['grid_nominal_value'], variable_costs=config['grid_variable_costs']),
+                                                co2_emissions_bus: Flow(nominal_value=(config['grid_nominal_value']*config['co2_emissions']))}) #100MW (?)
 
     h2_ship_source = Source(label='h2_ship', outputs={h2_to_storage_bus:Flow(fix=1, nominal_value=config['h2_ship_nominal_value'], variable_costs=config['h2_ship_variable_costs'])}) # Einheit check
     electrolyzer = Converter(label='electrolyzer', inputs={electricity_bus: Flow(fix=1, nominal_value=config['electrolyzer_nominal_value'])},outputs={h2_to_storage_bus: Flow()}, conversion_factors={h2_to_storage_bus: 0.25}) #conversion factor and Flow tbd
@@ -72,12 +74,13 @@ def create_energy_system(config):
     #add sink
     steel_mill = Sink(label='steel_mill', inputs={h2_to_production_bus: Flow(), electricity_bus: Flow(max=config['electricity_to_steel_max'], nominal_value=1)})
     electricity_slack = Sink(label='electricity_slack', inputs={electricity_bus: Flow(variable_costs=config['electricity_slack_variable_costs'])})
+    co2_emissions = Sink(label='co2_emissions', inputs= {co2_emissions_bus: Flow(nominal_value=(config['grid_nominal_value']*config['co2_emissions']))})
 # next steps include:
 # co2 emissions
 # dynamic flow to hydrogen (with costs) and input flow for hydrogen
 # 
 
-    h2_hub.add(steel_mill, electricity_slack)
+    h2_hub.add(steel_mill, electricity_slack, co2_emissions)
 
     return h2_hub
 
