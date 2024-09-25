@@ -39,11 +39,11 @@ def create_energy_system(config):
 
     #add buses
     electricity_bus = Bus(label='electricity') #, inputs, outputs
-    h2_to_storage_bus = Bus(label='h2_to_storage') #inputs, outputs to add
-    h2_to_production_bus = Bus(label='h2_to_production') #, inputs, outputs
+    h2_bus = Bus(label='h2_bus') #inputs, outputs to add
+    #h2_bus = Bus(label='h2_to_production') #, inputs, outputs
     co2_emissions_bus = Bus(label='co2_emissions_bus')
 
-    h2_hub.add(electricity_bus, h2_to_production_bus, h2_to_storage_bus, co2_emissions_bus)
+    h2_hub.add(electricity_bus, h2_bus, co2_emissions_bus)
 
     #open and get data from csv
     #pfad übergeben und Spaltenname für normed fixed value (Flow) (eingegeben im Config file)
@@ -56,14 +56,15 @@ def create_energy_system(config):
     grid_source = Source(label='grid', outputs={electricity_bus: Flow(fix=1, nominal_value=config['grid_nominal_value'], variable_costs=config['grid_variable_costs']),
                                                 co2_emissions_bus: Flow(nominal_value=(config['grid_nominal_value']*config['co2_emissions']))}) #100MW (?)
 
-    h2_ship_source = Source(label='h2_ship', outputs={h2_to_storage_bus:Flow(fix=1, nominal_value=config['h2_ship_nominal_value'], variable_costs=config['h2_ship_variable_costs'])}) # Einheit check
-    electrolyzer = Converter(label='electrolyzer', inputs={electricity_bus: Flow(fix=1, nominal_value=config['electrolyzer_nominal_value'])},outputs={h2_to_storage_bus: Flow()}, conversion_factors={h2_to_storage_bus: 0.25}) #conversion factor and Flow tbd
+    h2_ship_source = Source(label='h2_ship', outputs={h2_bus:Flow(fix=1, nominal_value=config['h2_ship_nominal_value'], variable_costs=config['h2_ship_variable_costs'])}) # Einheit check
+    electrolyzer = Converter(label='electrolyzer', inputs={electricity_bus: Flow(fix=1, nominal_value=config['electrolyzer_nominal_value'])},
+                             outputs={h2_bus: Flow()}, conversion_factors={h2_bus: 0.25}) #conversion factor and Flow tbd
 
     h2_hub.add(pv_source, wind_source, grid_source, h2_ship_source, electrolyzer)
 
     #add storage
-    h2_storage = GenericStorage(label= 'h2_storage', inputs={h2_to_storage_bus: Flow()},
-                                outputs={h2_to_production_bus: Flow()},
+    h2_storage = GenericStorage(label= 'h2_storage', inputs={h2_bus: Flow()},
+                                outputs={h2_bus: Flow()},
                                 loss_rate=config['h2_storage_loss_rate'],
                                 nominal_storage_capacity=config['h2_storage_nominal_storage_capacity'],
                                 inflow_conversion_factor=config['h2_storage_inflow_conversion'],
@@ -72,7 +73,7 @@ def create_energy_system(config):
     h2_hub.add(h2_storage)
 
     #add sink
-    steel_mill = Sink(label='steel_mill', inputs={h2_to_production_bus: Flow(), electricity_bus: Flow(max=config['electricity_to_steel_max'], nominal_value=1)})
+    steel_mill = Sink(label='steel_mill', inputs={h2_bus: Flow(), electricity_bus: Flow(max=config['electricity_to_steel_max'], nominal_value=1)})
     electricity_slack = Sink(label='electricity_slack', inputs={electricity_bus: Flow(variable_costs=config['electricity_slack_variable_costs'])})
     co2_emissions = Sink(label='co2_emissions', inputs= {co2_emissions_bus: Flow(nominal_value=(config['grid_nominal_value']*config['co2_emissions']))})
 # next steps include:
