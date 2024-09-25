@@ -4,16 +4,18 @@
 # pv settings
 pv_data_path: "weather_data/pv_data.csv"
 pv_data_column: "Wind Power"  #enter name of the column to get normed fixed values for Flow (value between 0 and 1)
-pv_nominal_value: 90000000  # pv_nominal_value [W], e.g. 5000000 = 5MW
+pv_nominal_value: 150000000  # pv_nominal_value [W], e.g. 5000000 = 5MW
+pv_variable_costs: 0  # set 0 so that all of the electricity from renewables is taken
 
 # wind settings
 wind_data_path: "weather_data/example_data_hourly.csv"
 wind_data_column: "P_wp" #enter name of the column to get normed fixed values for Flow (value between 0 and 1)
-wind_nominal_value: 80000000  # wind_nominal_value [W], e.g. 10000000 = 10MW
+wind_nominal_value: 100000000  # wind_nominal_value [W], e.g. 10000000 = 10MW
+wind_variable_costs: 0  # set 0 so that all of the electricity from renewables is taken
 
 # grid settings
 grid_nominal_value: 100000000 #to make dynamic
-grid_variable_costs: 2
+grid_variable_costs: 5
 
 # h2_ship_source settings
 h2_ship_nominal_value: 500
@@ -22,6 +24,7 @@ h2_ship_variable_costs: 50
 # electrolyzer settings
 electrolyzer_nominal_value: 10000000 #10MW (Plug. EX-4250D System Specifications.)
 h2_produced: 180 #kg/h gerundet aus (Plug. EX-4250D System Specifications.)
+electrolyzer_variable_costs: 2
 
 # h2_storage settings
 h2_storage_loss_rate: 0
@@ -30,11 +33,12 @@ h2_storage_inflow_conversion: 1
 h2_storage_outflow_conversion_factor: 1
 
 # steel mill
-steel_mill_power: 2 #Annahme 1.000.000t Stahl pro Jahr bei 500kWh entspricht einer Leistung von 57MW
-electricity_to_steel_max: 57000000
+steel_mill_power: 2 
+electricity_to_steel_max: 205200000 #Annahme bei 3,6 Mio t Stahl pro Jahr bei 500kWh entspricht einer Leistung von 3,6 Mio t 57MW = 205,2 MW
+steel_mill_variable_costs: 0
 
 # electricity slack
-electricity_slack_variable_costs: 100
+electricity_slack_variable_costs: 10000
 
 # co2 emissions
 # spezifischer Treibhausgas emissionen strommix (Icha, P., & Lauf, T. (2024). Umweltbundesamt)
