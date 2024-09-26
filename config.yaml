@@ -1,6 +1,5 @@
 # Configuration file
 
-
 # pv settings
 pv_data_path: "weather_data/pv_data.csv"
 pv_data_column: "Wind Power"  #enter name of the column to get normed fixed values for Flow (value between 0 and 1)
@@ -14,17 +13,17 @@ wind_nominal_value: 100000000  # wind_nominal_value [W], e.g. 10000000 = 10MW
 wind_variable_costs: 0  # set 0 so that all of the electricity from renewables is taken
 
 # grid settings
-grid_nominal_value: 100000000 #to make dynamic
-grid_variable_costs: 5
+grid_nominal_value: 1000000000 #to make dynamic
+grid_variable_costs: 2
 
 # h2_ship_source settings
-h2_ship_nominal_value: 500
-h2_ship_variable_costs: 50
+h2_ship_nominal_value: 5000
+h2_ship_variable_costs: 5
 
 # electrolyzer settings
-electrolyzer_nominal_value: 10000000 #10MW (Plug. EX-4250D System Specifications.)
-h2_produced: 180 #kg/h gerundet aus (Plug. EX-4250D System Specifications.)
-electrolyzer_variable_costs: 2
+electrolyzer_nominal_value: 100000000 #Annahme 10 Elektrolyseure 10* 10MW (Plug. EX-4250D System Specifications.)
+h2_produced: 1800 #kg/h gerundet aus 10* 10 MW Elektrolyzeur (Plug. EX-4250D System Specifications.)
+electrolyzer_variable_costs: 0
 
 # h2_storage settings
 h2_storage_loss_rate: 0
@@ -35,7 +34,14 @@ h2_storage_outflow_conversion_factor: 1
 # steel mill
 steel_mill_power: 2 
 electricity_to_steel_max: 205200000 #Annahme bei 3,6 Mio t Stahl pro Jahr bei 500kWh entspricht einer Leistung von 3,6 Mio t 57MW = 205,2 MW
-steel_mill_variable_costs: 0
+steel_mill_variable_costs: 0  # to prefer steel mill over electrolyzer 
+h2_for_steel: 41095.89  # kg / t DRI steel 90 - 130kg / t steel (M. Shahabuddin, Alireza Rahbari, Shabnam Sabah, Geoffrey Brooks, John Pye, & and M. Akbar Rhamdhani. Process modelling for the production of hydrogen-based direct reduced iron in shaft furnaces using different ore grades.)
+electricity_for_steel: 1528760000  # 3,787 MWh / t * 410,9 = 1528,76 MWh liquid steel EAF DRI Standort Hamburg (Elsheikh, H., & Eveloy, V. (2023). Renewable hydrogen based direct iron ore reduction and steel making with grid assistance. Energy Conversion and Management, 297, 117544. https://doi.org/10.1016/j.enconman.2023.117544)
+                              # 3,72 MWh (Bhaskar, A., Assadi, M., & Somehsaraei, H. N. (2020). Decarbonization of the Iron and Steel Industry with Direct Reduction of Iron Ore with Green Hydrogen. Energies. Advance online publication. https://doi.org/10.3390/en13030758)
+
+#steel 
+steel_price: -50
+steel_produced: 410.959 # t / h,  3,6 Mio t Stahl pro Jahr =^ 410,95 t / h (ArcelorMittal. (2024, September 25). Smarter steels for people and planet - Startschuss für Wasserstoffproduktion mit Hybit in Bremen. ICT Solutions GmbH Trier - www.ict.ag.)
 
 # electricity slack
 electricity_slack_variable_costs: 10000
