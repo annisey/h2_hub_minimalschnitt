@@ -6,8 +6,6 @@ from oemof.solph import create_time_index, Bus, Flow, Model, processing
 from plot_graph import plot_energy_system
 # import pprint as pp
 from plot_results import plot_result
-# electrolyzer constraing
-from electrolyzer_constraint import limit_electrolyzer_flow
  
 #for config file and opening data
 import yaml
@@ -98,11 +96,7 @@ def optimizer(energy_system, config):
 
 def main():
     config = load_config('config.yaml') #enter relative file path config file
-    h2_hub = create_energy_system(config)
-    
-    #print(h2_hub_solph.flows.keys())
-    #limit_electrolyzer_flow(h2_hub)
-    
+    h2_hub = create_energy_system(config)   
     h2_hub = optimizer(h2_hub, config) #Ergebnisse sind unter .results gespeichert
     plot_energy_system(h2_hub)
     plot_result(h2_hub)
