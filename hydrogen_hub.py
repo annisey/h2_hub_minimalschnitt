@@ -54,7 +54,8 @@ def create_energy_system(config):
 
     h2_ship_source = Source(label='h2_ship', outputs={h2_bus:Flow(nominal_value=config['h2_ship_nominal_value'], variable_costs=config['h2_ship_variable_costs'])}) 
     electrolyzer = Converter(label='electrolyzer', inputs={electricity_bus: Flow(nominal_value=config['electrolyzer_nominal_value'], variable_costs=config['electrolyzer_variable_costs'])},
-                             outputs={h2_bus: Flow()})
+                             outputs={h2_bus: Flow()},
+                             conversion_factors={electricity_bus: config['electrolyzer_nominal_value'] / config['h2_produced']})
 
     h2_hub.add(pv_source, wind_source, grid_source, h2_ship_source, electrolyzer)
 
@@ -71,8 +72,9 @@ def create_energy_system(config):
     #add sink
     steel_mill = Converter(label='steel_mill',
                            inputs={h2_bus: Flow(nominal_value=config['h2_for_steel']), electricity_bus: Flow(nominal_value=config['electricity_for_steel'], variable_costs=config['steel_mill_variable_costs'])},
-                           outputs={steel: Flow(nominal_value=config['steel_produced'], variable_costs=config['steel_price'])}
-                           )
+                           outputs={steel: Flow(max=config['steel_produced'], nominal_value=1, variable_costs=config['steel_price'])},
+                           conversion_factors={h2_bus: config['h2_for_steel'],  # Wasserstoff pro kg Stahl
+                                               electricity_bus: config['electricity_for_steel']})  # Strom pro kg Stahl
                            
     
     
@@ -98,7 +100,7 @@ def main():
     config = load_config('config.yaml') #enter relative file path config file
     h2_hub = create_energy_system(config)   
     h2_hub = optimizer(h2_hub, config) #Ergebnisse sind unter .results gespeichert
-    plot_energy_system(h2_hub)
+    # plot_energy_system(h2_hub)
     plot_result(h2_hub)
 
 if __name__ == "__main__":
