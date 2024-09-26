@@ -15,7 +15,7 @@ def plot_figures_for(element, title):
         ncol=2,
     )
     figure.subplots_adjust(top=0.8)
-    plt.show()
+    #plt.show()
 
 
 def plot_result(energy_system):
@@ -24,13 +24,16 @@ def plot_result(energy_system):
 
     h2_storage = views.node(main_results, 'h2_storage')
     electricity_bus = views.node(main_results, 'electricity')
+    steel = views.node(main_results, 'steel')
     co2_emissions = views.node(main_results, 'co2_emissions_bus')
 
-    plot_figures_for(electricity_bus, "Electricity Bus")
-    plot_figures_for(h2_storage, "H2 Bus")
-    plot_figures_for(co2_emissions, "CO2 Emissions")
+    plot_figures_for(electricity_bus, 'Electricity Bus')
+    plot_figures_for(h2_storage, 'H2 Bus')
+    plot_figures_for(steel, 'Steel Production')
+    # plot_figures_for(co2_emissions, "CO2 Emissions")
     # print(energy_system)
     #print(main_results)
+    plt.show()
 
 def main():
     energy_system = oemof.solph.EnergySystem()

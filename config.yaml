@@ -28,12 +28,10 @@ electrolyzer_variable_costs: 0
 # h2_storage settings
 h2_storage_loss_rate: 0
 h2_storage_nominal_storage_capacity: 600 #kg H2 Speicherung (APEX. Elektrolyseur Daten, 2023.)
-h2_storage_inflow_conversion: 1
-h2_storage_outflow_conversion_factor: 1
 
 # steel mill
 steel_mill_power: 2 
-electricity_to_steel_max: 205200000 #Annahme bei 3,6 Mio t Stahl pro Jahr bei 500kWh entspricht einer Leistung von 3,6 Mio t 57MW = 205,2 MW
+#electricity_to_steel_max: 205200000 #Annahme bei 3,6 Mio t Stahl pro Jahr bei 500kWh entspricht einer Leistung von 3,6 Mio t 57MW = 205,2 MW
 steel_mill_variable_costs: 0  # to prefer steel mill over electrolyzer 
 h2_for_steel: 41095.89  # kg / t DRI steel 90 - 130kg / t steel (M. Shahabuddin, Alireza Rahbari, Shabnam Sabah, Geoffrey Brooks, John Pye, & and M. Akbar Rhamdhani. Process modelling for the production of hydrogen-based direct reduced iron in shaft furnaces using different ore grades.)
 electricity_for_steel: 1528760000  # 3,787 MWh / t * 410,9 = 1528,76 MWh liquid steel EAF DRI Standort Hamburg (Elsheikh, H., & Eveloy, V. (2023). Renewable hydrogen based direct iron ore reduction and steel making with grid assistance. Energy Conversion and Management, 297, 117544. https://doi.org/10.1016/j.enconman.2023.117544)
