@@ -2,7 +2,7 @@
 
 # pv settings
 pv_data_path: "weather_data/pv_data.csv"
-pv_data_column: "Wind Power"  #enter name of the column to get normed fixed values for Flow (value between 0 and 1)
+pv_data_column: "PV Power"  #enter name of the column to get normed fixed values for Flow (value between 0 and 1)
 pv_nominal_value: 80.000000  # pv_nominal_value [W], e.g. 5000000 = 5MW
 pv_variable_costs: 0  # set 0 so that all of the electricity from renewables is taken
 

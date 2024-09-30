@@ -30,12 +30,12 @@ def plot_result(energy_system):
     co2_emissions = views.node(main_results, 'co2_emissions_bus')
 
     plot_figures_for(electricity_bus, 'Electricity Bus')
-    plot_figures_for(h2_storage, 'H2 Storage')
-    #plot_figures_for(steel, 'Steel Production')
-    plot_figures_for(steel_mill, 'Steel Mill')
+    # plot_figures_for(h2_storage, 'H2 Storage')
+    # #plot_figures_for(steel, 'Steel Production')
+    # plot_figures_for(steel_mill, 'Steel Mill')
     
-    plot_figures_for(electrolyzer, 'Electrolyzer')
-    plot_figures_for(co2_emissions, "CO2 Emissions")
+    # plot_figures_for(electrolyzer, 'Electrolyzer')
+    # plot_figures_for(co2_emissions, "CO2 Emissions")
     # print(energy_system)
     #print(main_results)
     plt.show()
