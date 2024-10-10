@@ -100,8 +100,8 @@ def main():
     config = load_config('config.yaml') #enter relative file path config file
     h2_hub = create_energy_system(config)   
     h2_hub = optimizer(h2_hub, config) #Ergebnisse sind unter .results gespeichert
-    # plot_energy_system(h2_hub)
-    plot_result(h2_hub)
+    plot_energy_system(h2_hub)
+    #plot_result(h2_hub)
 
 if __name__ == "__main__":
     main() 
