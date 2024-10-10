@@ -13,8 +13,6 @@ import pandas as pd
 
 import sys
 
-from pyomo.core import Constraint
-
 #load config file (where parameters are set)
 def load_config(file_path):
     with open(file_path, 'r') as file:
@@ -71,8 +69,8 @@ def create_energy_system(config):
 
     #add sink
     steel_mill = Converter(label='steel_mill',
-                           inputs={h2_bus: Flow(nominal_value=config['h2_for_steel']), electricity_bus: Flow(nominal_value=config['electricity_for_steel'], variable_costs=config['steel_mill_variable_costs'])},
-                           outputs={steel: Flow(max=config['steel_produced'], nominal_value=1, variable_costs=config['steel_price'])},
+                           inputs={h2_bus: Flow(), electricity_bus: Flow()},
+                           outputs={steel: Flow(nominal_value =config['steel_produced'], variable_costs=config['steel_price'])},
                            conversion_factors={h2_bus: config['h2_for_steel'],  # Wasserstoff pro kg Stahl
                                                electricity_bus: config['electricity_for_steel']})  # Strom pro kg Stahl
                            
@@ -92,7 +90,7 @@ def optimizer(energy_system, config):
     energy_system.results['main'] = processing.results(model) # data components and flows
     energy_system.results['meta'] = processing.meta_results(model) #data solvers
     # Dump the energy system including the results (saving) for later analyzing of the results without running the whole code
-    energy_system.dump('C:\\Users\\ann82611\\ownCloud\\U-Platte\\04_Code\\hydrogen_hub\\h2_hub_minimalschnitt\\h2_hub_dumps', 'h2_hub_dump.oemof')
+    energy_system.dump('C:\\Users\\ann82611\\ownCloud\\U-Platte\\04_Code\\hydrogen_hub\\h2_hub_minimalschnitt\\h2_hub_dumps', 'h2_hub_dump_1.oemof')
     return energy_system
 
 
@@ -100,8 +98,8 @@ def main():
     config = load_config('config.yaml') #enter relative file path config file
     h2_hub = create_energy_system(config)   
     h2_hub = optimizer(h2_hub, config) #Ergebnisse sind unter .results gespeichert
-    plot_energy_system(h2_hub)
-    #plot_result(h2_hub)
+    # plot_energy_system(h2_hub)
+    plot_result(h2_hub)
 
 if __name__ == "__main__":
     main() 
