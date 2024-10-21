@@ -1,13 +1,9 @@
 import oemof.solph as solph
 from oemof.solph.components import Sink, Source, Converter, GenericStorage
 from oemof.solph import create_time_index, Bus, Flow, Model, processing
-
-#for plotting
 from plot_graph import plot_energy_system
-# import pprint as pp
 from plot_results import plot_result
- 
-#for config file and opening data
+from co2_emissions import get_co2_emissions
 import yaml
 import pandas as pd
 
@@ -48,7 +44,7 @@ def create_energy_system(config):
     pv_source = Source(label='pv', outputs={electricity_bus: Flow(fix=pv_data, nominal_value=config['pv_nominal_value'], variable_costs=config['pv_variable_costs'])})
     wind_source = Source(label='wind', outputs={electricity_bus: Flow(fix=wind_data, nominal_value=config['wind_nominal_value'],variable_costs=config['wind_variable_costs'])})
     grid_source = Source(label='grid', outputs={electricity_bus: Flow(nominal_value=config['grid_nominal_value'], variable_costs=config['grid_variable_costs']),
-                                                co2_emissions_bus: Flow(nominal_value=(config['grid_nominal_value']*config['co2_emissions']))})
+                                                co2_emissions_bus: Flow(nominal_value=config['grid_nominal_value'])})
 
     h2_ship_source = Source(label='h2_ship', outputs={h2_bus:Flow(nominal_value=config['h2_ship_nominal_value'], variable_costs=config['h2_ship_variable_costs'])}) 
     electrolyzer = Converter(label='electrolyzer', inputs={electricity_bus: Flow(nominal_value=config['electrolyzer_nominal_value'], variable_costs=config['electrolyzer_variable_costs'])},
@@ -77,7 +73,7 @@ def create_energy_system(config):
     
     
     electricity_slack = Sink(label='electricity_slack', inputs={electricity_bus: Flow(variable_costs=config['electricity_slack_variable_costs'])})
-    co2_emissions = Sink(label='co2_emissions', inputs= {co2_emissions_bus: Flow(nominal_value=(config['grid_nominal_value']*config['co2_emissions']))})
+    co2_emissions = Sink(label='co2_emissions', inputs= {co2_emissions_bus: Flow()})
 
     h2_hub.add(steel_mill, electricity_slack, co2_emissions)
 
@@ -90,7 +86,7 @@ def optimizer(energy_system, config):
     energy_system.results['main'] = processing.results(model) # data components and flows
     energy_system.results['meta'] = processing.meta_results(model) #data solvers
     # Dump the energy system including the results (saving) for later analyzing of the results without running the whole code
-    energy_system.dump('C:\\Users\\ann82611\\ownCloud\\U-Platte\\04_Code\\hydrogen_hub\\h2_hub_minimalschnitt\\h2_hub_dumps', 'h2_hub_dump_1.oemof')
+    energy_system.dump('C:\\Users\\ann82611\\ownCloud\\U-Platte\\04_Code\\hydrogen_hub\\h2_hub_minimalschnitt\\h2_hub_dumps', 'h2_hub_dump_pv_100.oemof')
     return energy_system
 
 
@@ -98,8 +94,9 @@ def main():
     config = load_config('config.yaml') #enter relative file path config file
     h2_hub = create_energy_system(config)   
     h2_hub = optimizer(h2_hub, config) #Ergebnisse sind unter .results gespeichert
+    co2_emissions = get_co2_emissions(h2_hub, config)
     # plot_energy_system(h2_hub)
-    plot_result(h2_hub)
+    plot_result(h2_hub, co2_emissions)
 
 if __name__ == "__main__":
     main() 
