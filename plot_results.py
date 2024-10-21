@@ -44,7 +44,7 @@ def plot_result(energy_system, co2_emissions):
 
 def main():
     energy_system = oemof.solph.EnergySystem()
-    energy_system.restore('C:\\Users\\ann82611\\ownCloud\\U-Platte\\04_Code\\hydrogen_hub\\h2_hub_minimalschnitt\\h2_hub_dumps', 'h2_hub_dump_1.oemof')
+    energy_system.restore('C:\\Users\\ann82611\\ownCloud\\U-Platte\\04_Code\\hydrogen_hub\\h2_hub_minimalschnitt\\h2_hub_dumps', 'h2_hub_dump.oemof')
     
     # load config
     with open('config.yaml', 'r') as file:
