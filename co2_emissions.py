@@ -10,10 +10,6 @@ def get_co2_emissions(energy_system, config):
      flow_grid = results.loc[(energy_system.node['grid'], energy_system.node['electricity'])]['sequences']
 
      co2_emissions = flow_grid * config['co2_emissions']
-
-    #  print(flow_grid.head())
-    #  print(co2_emissions.head())
-
      return co2_emissions
 
 
@@ -25,7 +21,7 @@ def main():
     with open('config.yaml', 'r') as file:
         config = yaml.safe_load(file)
     
-    get_co2_emissions(energy_system, config)
+    co2_emissions = get_co2_emissions(energy_system, config)
 
 
 if __name__ == "__main__":
