@@ -95,7 +95,7 @@ def main():
     h2_hub = create_energy_system(config)   
     h2_hub = optimizer(h2_hub, config) #Ergebnisse sind unter .results gespeichert
     co2_emissions = get_co2_emissions(h2_hub, config)
-    # plot_energy_system(h2_hub)
+    plot_energy_system(h2_hub)
     plot_result(h2_hub, co2_emissions)
 
 if __name__ == "__main__":
