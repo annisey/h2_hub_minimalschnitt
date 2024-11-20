@@ -86,7 +86,7 @@ def optimizer(energy_system, config):
     energy_system.results['main'] = processing.results(model) # data components and flows
     energy_system.results['meta'] = processing.meta_results(model) #data solvers
     # Dump the energy system including the results (saving) for later analyzing of the results without running the whole code
-    energy_system.dump('C:\\Users\\ann82611\\ownCloud\\U-Platte\\04_Code\\hydrogen_hub\\h2_hub_minimalschnitt\\h2_hub_dumps', 'h2_hub_dump.oemof')
+    energy_system.dump('C:\\Users\\ann82611\\ownCloud\\U-Platte\\04_Code\\hydrogen_hub\\h2_hub_minimalschnitt\\h2_hub_dumps', 'h2_hub_dump_1_week.oemof')
     return energy_system
 
 
